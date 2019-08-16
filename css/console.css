@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css?family=Cutive+Mono&display=swap');
+
+body {
+    background-color: rgb(2, 0, 4);
+    color: greenyellow;
+    font-family: 'Cutive Mono', monospace;
+}
+
+p {
+    margin: 0;
+}
+
+.input {
+    padding-left: 3px;
+}
+
+a {
+    color: greenyellow;
+}
