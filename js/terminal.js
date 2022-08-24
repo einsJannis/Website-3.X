@@ -125,7 +125,6 @@ let commands = {
     socialmedia: socialMedia,
     contact: contact,
     about: about,
-    pricing: pricing
 };
 
 function print(message) {
@@ -161,7 +160,7 @@ function listenForNewInput() {
 }
 
 function scrollDown() {
-	document.body.lastElementChild().scrollIntoView(false);
+	document.body.lastElementChild.scrollIntoView(false);
 }
 
 function keydownEvent(e) {
