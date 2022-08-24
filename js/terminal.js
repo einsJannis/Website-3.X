@@ -1,6 +1,7 @@
 let user = "user";
 let path = "~";
 let listeningForInput = false;
+let command_running = false;
 let inputID = 0;
 let history = [];
 let historyPointer = 0;
@@ -9,18 +10,17 @@ let intervalCount = 0;
 
 const helpPages = [
     "<b>Help page</b><br><br>" +
-    "Welcome on my Website.<br>" +
-    "You can use the command <i>help --cmd --list</i> to get an quick overview <br>" +
-    "An detailed helping page is coming soon.<br>" +
-    "<br>LG <b>einsJannis</b><br>"
+    "Welcome to my Website.<br>" +
+    "You can use the command <i>help cmd --list</i> to get an quick overview <br>" +
+    "<br>Regards <b>einsJannis</b><br>"
 ];
 const commandHelp = {
-    help: "A little tutorial and a overview of all commands [usage: 'help --page <i>pageNumber</i>' or 'help --cmd <i>commandName</i>']",
+    help: "A little tutorial and a overview of all commands [usage: 'help --page <i>pageNumber</i>' or 'help cmd <i>commandName</i>']",
     echo: "Prints what you've typed [usage: 'echo <i>message</i>']",
     su: "Changes user [usage: 'su <i>newUsername</i>']",
     clear: "Clears visual history [usage: 'clear']",
-    imprint: "Shows the sites imprint and privacy [usage: 'imprint']",
-    socialmedia: "Shows all social media sites [usage: 'socialmedia']",
+    imprint: "Shows the sites imprint and privacy policy [usage: 'imprint']",
+    socialmedia: "Shows all of my social media sites [usage: 'socialmedia']",
     contact: "Shows all contact methods [usage: 'contact']",
     about: "Shows information about myself [usage: 'about']"
 };
@@ -32,7 +32,7 @@ const help = function (args) {
         } else {
             print("Page out of range. Please enter a number between 1 and " + helpPages.length.toString() + ".");
         }
-    } else if (args[0] === "--cmd") {
+    } else if (args[0] === "cmd") {
         if (args[1] === "--list") {
             print("<br><b>List of all commands</b>");
             Object.keys(commandHelp).map(function (k) {
@@ -71,12 +71,12 @@ const imprint = function (args) {
         "Jannis Piekarek<br>" +
         "Imfangstrasse 1<br>" +
         "6005 Luzern | Schweiz<br>" +
-        "<a href='mailto:contact@einsjannis.dev'>contact@einsjannis.dev</a><br>" +
+        "<a href='mailto:einsjannis@gmail.com'>einsjannis@gmail.com</a><br>" +
         "<br>" +
         "<b>Privacy policy</b><br>" +
-        "This site does not store any user data besides server logs, which are only used to detect bugs and fix them.<br>" +
-        "If you want us to erase your data, just contact the admin of this site by the email address provided above.<br>" +
-        "<br>"
+        "This site does not store any user data besides server logs which may contain IP addresses and other information that is sent by your browser with a request to this website.<br>" +
+        "If you want us to erase your data you have to contact the admin of this site through the email address provided above.<br>" +
+		"<br>"
     )
 };
 const socialMedia = function (args) {
@@ -85,10 +85,9 @@ const socialMedia = function (args) {
         "<b>Social Media</b><br>" +
         "Discord: einsJannis#0001<br>" +
         "Twitter: <a href='https://twitter.com/einsJannis'>@einsJannis</a><br>" +
-        "Instagram: <a href='https://instagram.com/einsjannis'>@einsjannis</a><br>" +
-        "Youtube: <a href='https://youtube.com/channel/UCr571QxoqSbAofmq_lXlpoA'>einsJannis</a><br>" +
         "Steam: <a href='https://steamcommunity.com/id/einsJannis'>einsJannis</a><br>" +
         "Reddit: <a href='https://reddit.com/u/einsJannis'>u/einsJannis</a><br>" +
+		"GitHub: <a href='https://github.com/einsJannis'>einsJannis</a></br>" +
         "<br>"
     );
 };
@@ -96,7 +95,7 @@ const contact = function (args) {
     print(
         "<br>" +
         "<b>Contact</b><br>" +
-        "E-Mail: <a href='mailto:contact@einsjannis.dev'>contact@einsjannis.dev</a><br>" +
+        "E-Mail: <a href='mailto:einsjannis@gmail.com'>einsjannis@gmail.com</a><br>" +
         "<br>"
     )
 };
@@ -104,35 +103,19 @@ const about = function (args) {
     print(
         "<br>" +
         "<b>About me</b><br>" +
-        "I'm a 16 year old freelancing developer.<br>" +
-        "I've been developing now for 2 years and my first contact with programming was 4 years ago.<br>" +
-        "I can develop in those languages (Sorted by experience):<br>" +
-        "- Java<br>" +
-        "- <i>php</i> (+ html&css)<br>" +
-        "- JavaScript<br>" +
-        "- Python<br>" +
-        "- C++<br>" +
-        "I also like designing things and can speak english and german<br>" +
+		"I'm a self thaught programmer from Switzerland.<br>" +
+		"My thing is to start way too ambitious projects which are completely useless because they either already exist in some form or get abandoned before I finish them.<br>" +
+		"I love Kotlin and Rust but I have use a bunch of other languages before like the following:<br>" +
+		"<br> - Java<br> - Java/TypeScript<br> - Python<br> - Shell-Script (POSIX Shell)<br> - C<br> - C++<br><br>" +
+		"I am also daily driving Arch Linux and am thus quite agile with things related to Linux.<br>" +
+		"I have am very interested in how code can let a computer do stuff and thus I love to explore how libraries, protocols, compilers, techonlegies and the underlying hardware works.<br>" +
+		"<b>Education</b><br>" +
+		"<br> - Gymnasiale Matura with focus on physics and applied mathematics, Kantonsschule Alpenquai, Lucerne, Switzerland June 2022<br><br>" +
+		"<b>Employment</b><br>" +
+		"I'm currently looking for a job.<br>" +
         "<br>"
     )
 };
-const pricing = function (args) {
-    print(
-        "<br>" +
-        "<b>Pricing</b><br>" +
-        "+--------------------------------------------------------------------------+-------------------+<br>" +
-        "¦ Product/Service                                                          ¦ Pricing           ¦<br>" +
-        "+--------------------------------------------------------------------------+-------------------+<br>" +
-        "¦ IT-Support                                                               ¦      10$/hour     ¦<br>" +
-        "+--------------------------------------------------------------------------+-------------------+<br>" +
-        "¦ Website                                                                  ¦ min 100$          ¦<br>" +
-        "+--------------------------------------------------------------------------+-------------------+<br>" +
-        "¦ Application                                                              ¦ min 800$          ¦<br>" +
-        "+--------------------------------------------------------------------------+-------------------+<br>" +
-        "Request those things from above by sending me a e-mail (you can find my email address by using the command <i>contact</i>)"
-    )
-};
-
 let commands = {
     help: help,
     echo: echo,
@@ -147,10 +130,12 @@ let commands = {
 
 function print(message) {
     document.body.innerHTML += "<p>" + message + "</p>\n";
+	scrollDown();
 }
 
 function initTerminal() {
     window.addEventListener("keydown", keydownEvent);
+	window.addEventListener("click", onClickEvent);
     setInterval(function () {
         intervalCount++;
         if (intervalCount % 2 === 0) {
@@ -170,12 +155,19 @@ function listenForNewInput() {
         "   <span class=\"su\">" + user + "@einsjannis.dev" + path + "$</span>\n" +
         "   <span class=\"input cursor\"></span>\n" +
         "</p>";
+	scrollDown();
+	command_running = false;
     listeningForInput = true;
+}
+
+function scrollDown() {
+	document.body.lastElementChild().scrollIntoView(false);
 }
 
 function keydownEvent(e) {
     if (listeningForInput) {
         e.preventDefault();
+		scrollDown();
         if (e.key === "Enter") {
             document.getElementsByClassName("cursor").item(0).style.borderRight = "1px solid rgba(0,0,0,0)";
             executeCommand();
@@ -211,8 +203,9 @@ function keydownEvent(e) {
                     entry = history[historyPointer - 1];
                 }
             }
-        } else if (e.key === "Tab") {
-
+//TODO: } else if (e.key === "Tab") {
+		} else if (e.key === "Escape") {
+			listeningForInput = false;
         } else if (e.key.length === 1) {
             entry += e.key;
         }
@@ -220,8 +213,15 @@ function keydownEvent(e) {
     }
 }
 
+function onClickEvent(e) {
+	if (listeningForInput === false && command_running === false) {
+		listeningForInput = true;
+	}
+}
+
 function executeCommand() {
     listeningForInput = false;
+	command_running = true;
     document.getElementById(inputID.toString()).getElementsByClassName("input").item(0).setAttribute("class", "input");
     history.push(entry);
     let cmd;
